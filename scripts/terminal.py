@@ -23,6 +23,7 @@ class Terminal:
     __RESET  = "\033[0m"
     __BOLD   = "\033[1m"
     __DIM    = "\033[2m"
+    __ITALIC = "\033[3m]"
 
     __RED    = "\033[31m"
     __GREEN  = "\033[32m"
@@ -39,13 +40,24 @@ class Terminal:
     # ---------------- Pretty print methods ----------------
 
     @classmethod
-    def bold(cls, text: str) -> str: ...
+    def bold(cls, text: str) -> str:
+        """Takes `text` input, returns bold version"""
+        return f"{cls.__BOLD}{text}{cls.__RESET}"
 
     @classmethod
-    def colour(cls, text: str, code: str) -> str: ...
+    def dim(cls, text: str) -> str:
+        """Renders `text` input as dim."""
+        return f"{cls.__DIM}{text}{cls.__RESET}"
 
     @classmethod
-    def italic(cls, text: str) -> str: ...
+    def colour(cls, text: str, code: str) -> str:
+        """Takes a `text` input and an ANSI colour `code`, returns them together."""
+        return f"{code}{text}{cls.__RESET}"
+
+    @classmethod
+    def italic(cls, text: str) -> str:
+        """Takes in a string of `text` and returns the italicised version."""
+        return f"{cls.__ITALIC}{text}{cls.__RESET}"
 
     # ---------------- Raw input ----------------
 
