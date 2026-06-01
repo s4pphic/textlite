@@ -1,7 +1,7 @@
 [project]
 name = "textlite"
-version = "0.1.0"
-description = "Add your description here"
+version = "2026.60126.0"
+description = "A terminal based adventure RPG game in Python"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = []
