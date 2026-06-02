@@ -1,9 +1,12 @@
-# "Platform agnostic" terminal magic to avoid
-# having per-OS code muddling about across the
-# entire codebase, so it's all contained right
-# here. It's gonna be pretty messy...
-
-# Some example code of how this *should* be used!
+# Platform agnostic methods to manipulate any modern ANSI terminal.
+# Probably won't work in some super old terminals from like 35 years
+# ago. But for modern terminals like kitty, wt or iterm this should
+# work fine. If not; open up an issue or if you have a fix, open
+# up a PR!
+#
+# SPDX-License-Identifier: MIT  
+#
+# ---- example ----
 #
 # Terminal.print_f("Saved!", bold=True, colour="green")
 # Terminal.clear()
@@ -85,10 +88,15 @@ class Terminal:
     def _style(cls, text: str, *, bold=False, dim=False, italic=False, colour: str | None = None) -> str:
         """Wrap `text` in the requested style codes (noop when not a TTY)"""
         codes = ""
-        if bold: codes += cls.__BOLD
-        if dim: codes += cls.__DIM
-        if italic: codes += cls.__ITALIC
-        if colour: codes += cls._colour_code(colour)
+        if bold:
+            codes += cls.__BOLD
+        if dim:
+            codes += cls.__DIM
+        if italic:
+            codes += cls.__ITALIC
+        if colour:
+            codes += cls._colour_code(colour)
+
         return cls._esc(codes, text) if codes else text
     
     # ---------------- Formatted print (very cool) ----------------
@@ -106,8 +114,7 @@ class Terminal:
     @classmethod
     def move_to(cls, col: int, row: int) -> None:
         """Move the cursor to (col, row). Noop when not a TTY"""
-        if not cls.is_tty():
-            return
+        if not cls.is_tty(): return
         sys.stdout.write(f"\033[{row};{col}H")
         sys.stdout.flush()
  
@@ -143,8 +150,10 @@ class Terminal:
         if not cls.is_tty():
             print(body, end="")
             return
+        
         out = "\033[s" if restore else ""
         out += f"\033[{row};{col}H{body}"
+
         if restore:
             out += "\033[u"
         sys.stdout.write(out)
@@ -160,16 +169,14 @@ class Terminal:
     @classmethod
     def clear(cls) -> None:
         """Clear the screen and home the cursor."""
-        if not cls.is_tty():
-            return
+        if not cls.is_tty(): return
         sys.stdout.write("\033[2J\033[H")
         sys.stdout.flush()
  
     @classmethod
     def clear_line(cls) -> None:
         """Erase the current line and return to its start."""
-        if not cls.is_tty():
-            return
+        if not cls.is_tty(): return
         sys.stdout.write("\r\033[2K")
         sys.stdout.flush()
  
