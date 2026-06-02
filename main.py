@@ -1,7 +1,7 @@
-import sys
+from scripts.terminal import Terminal
 
 def main():
-    pass
+    Terminal.clear()
 
 if __name__ == "__main__":
     main()
